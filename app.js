@@ -1,9 +1,15 @@
 var express = require('express');
 const axios = require('axios');
 const cron = require('node-cron');
+var http = require("http");
 
 var port = process.env.PORT || 3000;
 var app = express();
+
+setInterval(function() {
+    http.get("http://edgeryders.herokuapp.com");
+    console.log('ping')
+}, 300000);
 
 let data = {
 	stories: '',
@@ -159,7 +165,7 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
   app.get("/festival", (req, res) => {
   res.json(data);
 });
-  
+
 app.get('/', function (req, res) {
  res.send(JSON.stringify({ Hello: 'World'}));
 });
