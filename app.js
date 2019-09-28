@@ -2,9 +2,12 @@ var express = require('express');
 const axios = require('axios');
 const cron = require('node-cron');
 var http = require("http");
+var cors = require('cors')
 
 var port = process.env.PORT || 3000;
 var app = express();
+
+app.use(cors())
 
 setInterval(function() {
     http.get("http://edgeryders.herokuapp.com");
