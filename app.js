@@ -17,7 +17,8 @@ setInterval(function() {
 let data = {
 	stories: '',
 	events: '',
-	conversations: 'test'
+	conversations: 'test',
+  participants: '',
 };
 
 cron.schedule('*/1 * * * *', () => {
@@ -116,6 +117,39 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-featured.json')
     console.log(error);
   })
 
+axios.get('https://edgeryders.eu/tags/webcontent-festival-organiser-bio.json').then(function (response) {
+
+   var participantsArray = response.data.topic_list.topics.map(function(participant){
+
+  var participantExcerpt = participant.excerpt.replace(/(@[^\s]*(?=<\/a>))/g, "").replace(/(<([^>]+)>)/gi, "").replace(/\s*\[.*?\]\s*/g, "").replace('&hellip;','...').replace('&amp', '&').split(/\n/g);
+
+
+if (participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g) !== null) {
+  var participantUsername = participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g)[0];
+} else {
+  participantUsername = null
+}
+
+
+      var participantObject = {
+        'title': participant.title,
+        'username': participantUsername,
+        'excerpt': participantExcerpt,
+        'image': participant.image_url,
+        'created': participant.created_at,
+        'updated': participant.bumped_at,
+      };
+      return participantObject;
+   });
+
+  data.participants = participantsArray;
+
+}).catch(function (error) {
+    console.log(error);
+  })
+
+  
+
 axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
   .then(function (response) {
 
@@ -162,11 +196,6 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
   res.json(data);
 });
 
-});
-
-
-  app.get("/festival", (req, res) => {
-  res.json(data);
 });
 
 app.get('/', function (req, res) {
