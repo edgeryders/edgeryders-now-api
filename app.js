@@ -1,19 +1,6 @@
-const express = require("express");
-const axios = require('axios');
-const cron = require('node-cron');
-
-const app = express();
-
-const port = 5000;
-
-// Body parser
-app.use(express.urlencoded({ extended: false }));
-
-// Home route
-app.get("/", (req, res) => {
-  res.send("Welcome to a basic express App");
-});
-
+var express = require('express');
+var port = process.env.PORT || 3000;
+var app = express();
 
 let data = {
 	stories: '',
@@ -155,14 +142,14 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
     console.log(error);
   })
 
-// Mock API
+app.get('/', function (req, res) {
+ res.send(JSON.stringify({ Hello: 'World'}));
+});
+
 app.get("/festival", (req, res) => {
   res.json(data);
 });
 
-
-// Listen on port 5000
-app.listen(port, () => {
-  console.log(`Server is booming on port 5000
-Visit http://localhost:5000`);
+app.listen(port, function () {
+ console.log('Example app listening on port !');
 });
