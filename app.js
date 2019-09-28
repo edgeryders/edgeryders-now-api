@@ -11,6 +11,10 @@ let data = {
 	conversations: 'test'
 };
 
+cron.schedule('*/1 * * * *', () => {
+  console.log('fetching festival content ✧*｡٩(ˊᗜˋ*)و✧*｡');
+  
+
 axios.get('https://edgeryders.eu/tags/webcontent-festival-event.json')
   .then(function (response) {
 
@@ -145,13 +149,21 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
     console.log(error);
   })
 
+  app.get("/festival", (req, res) => {
+  res.json(data);
+});
+
+});
+
+
+  app.get("/festival", (req, res) => {
+  res.json(data);
+});
+  
 app.get('/', function (req, res) {
  res.send(JSON.stringify({ Hello: 'World'}));
 });
 
-app.get("/festival", (req, res) => {
-  res.json(data);
-});
 
 app.listen(port, function () {
  console.log('Example app listening on port !');
