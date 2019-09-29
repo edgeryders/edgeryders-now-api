@@ -136,6 +136,7 @@ if (participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g) !== null) {
         'username': participantUsername,
         'excerpt': participantExcerpt,
         'image': participant.image_url,
+        'link': 'https://edgeryders.eu/t/' + participant.slug,
         'created': participant.created_at,
         'updated': participant.bumped_at,
       };
