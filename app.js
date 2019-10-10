@@ -19,7 +19,7 @@ let data = {
 	events: '',
 	conversations: 'test',
   participants: '',
-  categories: ''
+  categories: '',
 };
 
 cron.schedule('*/1 * * * *', () => {
@@ -149,10 +149,9 @@ if (participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g) !== null) {
     console.log(error);
   })
 
- axios.get("https://edgeryders.eu/categories.json")
-              .then(({ data }) => {
+axios.get('https://edgeryders.eu/categories.json').then(function (response) {
 
-          let categoryArray = data.category_list.categories.filter(
+  let categoryArray = response.data.category_list.categories.filter(
             function(e) {
               return (
                 e.name !== "Campfire" &&
@@ -171,10 +170,12 @@ if (participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g) !== null) {
           }
 
           data.categories = sortCats(categoryArray);
-          })
-              .catch(function (error) {
+
+}).catch(function (error) {
     console.log(error);
   })
+
+
 
 axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
   .then(function (response) {
