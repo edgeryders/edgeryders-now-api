@@ -19,11 +19,11 @@ let data = {
 	events: '',
 	conversations: 'test',
   participants: '',
+  categories: ''
 };
 
 cron.schedule('*/1 * * * *', () => {
   console.log('fetching festival content ✧*｡٩(ˊᗜˋ*)و✧*｡');
-  
 
 axios.get('https://edgeryders.eu/tags/webcontent-festival-event.json')
   .then(function (response) {
@@ -99,6 +99,7 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-featured.json')
     		'link': storyLink,
     		'image': story.image_url,
     		'views': story.views,
+        'comments': story.posts_count - 1,
     		'author': {
     			'name': storyAuthor.name,
     			'username': storyAuthor.username,
@@ -110,7 +111,6 @@ axios.get('https://edgeryders.eu/tags/webcontent-festival-featured.json')
     	};
       return storyObject;
 });
-
     data.stories = storiesArray;
   })
   .catch(function (error) {
@@ -149,7 +149,32 @@ if (participant.excerpt.match(/(@[^\s]*(?=<\/a>))/g) !== null) {
     console.log(error);
   })
 
-  
+ axios.get("https://edgeryders.eu/categories.json")
+              .then(({ data }) => {
+
+          let categoryArray = data.category_list.categories.filter(
+            function(e) {
+              return (
+                e.name !== "Campfire" &&
+                e.name !== "Workspaces" &&
+                e.name !== "Knowledge Collection" &&
+                e.name !== "Documentation & Support" &&
+                e.description !== null
+              );
+            }
+          );
+
+          function sortCats(catdata) {
+            return catdata.sort((a, b) =>
+            a.topics[0].last_posted_at < b.topics[0].last_posted_at ? 1 : -1
+            );
+          }
+
+          data.categories = sortCats(categoryArray);
+          })
+              .catch(function (error) {
+    console.log(error);
+  })
 
 axios.get('https://edgeryders.eu/tags/webcontent-festival-conversations.json')
   .then(function (response) {
