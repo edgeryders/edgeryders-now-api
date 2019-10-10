@@ -13,7 +13,7 @@ npm install
 
 ### Start server
 ```
-npm run serve
+npm run start
 ```
 
-Runs on localhost:3000 🍾
+Runs on localhost:3000 🥂
