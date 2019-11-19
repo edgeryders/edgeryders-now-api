@@ -95,31 +95,28 @@ cron.schedule("*/1 * * * *", () => {
       console.log(error);
     });
 
-var self = data;
+  var self = data;
   for (i = 0; i < 10; i++) {
-      axios.get("https://edgeryders.eu/latest.json?page=" + i)
+    axios
+      .get("https://edgeryders.eu/latest.json?page=" + i)
       .then(function(response) {
         var latest = response.data.topic_list.topics;
         var users = response.data.users;
 
         var i;
-        
+
         for (i = 0; i < latest.length; i++) {
-          
-          var username = latest[i].last_poster_username    
+          var username = latest[i].last_poster_username;
 
-          if (username !== undefined) {  
-            var thisUser = users.filter(
-              function(e) {
-                return (
-                e.username == username
-                );
-              }
-            );
+          if (username !== undefined) {
+            var thisUser = users.filter(function(e) {
+              return e.username == username;
+            });
 
-        
-              axios.get("https://edgeryders.eu/u/" + username + '.json').then(function(resp) {
-                 var obj = {
+            axios
+              .get("https://edgeryders.eu/u/" + username + ".json")
+              .then(function(resp) {
+                var obj = {
                   name: resp.data.user.name,
                   username: resp.data.user.username,
                   id: resp.data.user.id,
@@ -130,51 +127,48 @@ var self = data;
                   website: resp.data.user.website,
                   location: resp.data.user.location,
                   topics: resp.data.topics,
-                  avatar: "https://edgeryders.eu" + resp.data.user.avatar_template.replace("{size}", "200"),
+                  avatar:
+                    "https://edgeryders.eu" +
+                    resp.data.user.avatar_template.replace("{size}", "200"),
                   link: "https://edgeryders.eu/u/" + resp.data.user.username
                 };
 
-             function exists(object, array) {
-           return array.some(function(elem) {
-                      return elem.username === object.username;
-                 })
-        }
+                function exists(object, array) {
+                  return array.some(function(elem) {
+                    return elem.username === object.username;
+                  });
+                }
 
-        function notUpdated(object, array) {
-           return array.some(function(elem) {
-                      return elem.last_posted === object.last_posted;
-                 })
-        }
+                function notUpdated(object, array) {
+                  return array.some(function(elem) {
+                    return elem.last_posted === object.last_posted;
+                  });
+                }
 
-if (exists(obj, self.latest_users)) {
-    console.log("already exists");
-    if (!notUpdated(obj, self.latest_users)) {
-      self.latest_users.push(obj);
-    }
-}
+                if (exists(obj, self.latest_users)) {
+                  console.log("already exists");
+                  if (!notUpdated(obj, self.latest_users)) {
+                    self.latest_users.push(obj);
+                  }
+                }
 
-if (!exists(obj, self.latest_users)) {
-      self.latest_users.push(obj);
+                if (!exists(obj, self.latest_users)) {
+                  self.latest_users.push(obj);
+                }
+              })
+              .catch(function(error) {});
 
-}
-
-              }).catch(function(error) {
-
-              });
-            
-
-
-            self.latest_topics.push(latest[i])
-
+            self.latest_topics.push(latest[i]);
           }
         }
         function sortByKey(array, key) {
           return array.sort(function(a, b) {
-              var x = a[key]; var y = b[key];
-              return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+            var x = a[key];
+            var y = b[key];
+            return x < y ? 1 : x > y ? -1 : 0;
           });
         }
-        sortByKey(self.latest_users, "last_posted")
+        sortByKey(self.latest_users, "last_posted");
       })
       .catch(function(error) {
         console.log(error);
@@ -370,7 +364,6 @@ const server = app.listen(port, function() {
   console.log("Example app listening on port: " + port);
 });
 
-const socketio = require('socket.io')(server);
+const socketio = require("socket.io")(server);
 
-socketio.emit('chat-message', (data));
-
+socketio.emit("chat-message", data);
