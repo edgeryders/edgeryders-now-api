@@ -99,8 +99,48 @@ cron.schedule("*/1 * * * *", () => {
   var self = data;
 
    axios.get("https://edgeryders.eu/tags/community-call.json").then(function(response) {
+    var usersArray = response.data.users;
+    var callsArray = response.data.topic_list.topics.map(function(topic) {
 
-      self.calls = response.data;
+    var topicExcerpt = topic.excerpt
+        .replace(/(<([^>]+)>)/gi, "")
+        .replace(/\s*\[.*?\]\s*/g, "")
+        .replace(/(\r\n|\n|\r|\\n)/gm, "")
+        .replace(/(\r\n|\n|\r|\\n)/gm, "")
+        .replace("&hellip;", "...")
+        .replace("&amp", "&");
+
+      var topicLink = "https://edgeryders.eu/t/" + topic.slug;
+
+      var topicAuthor = usersArray.find(item => {
+        return item.id == topic.posters[0].user_id;
+      });
+
+      var authorAvatar =
+        "https://edgeryders.eu" +
+        topicAuthor.avatar_template.replace("{size}", "200");
+
+      var topicObject = {
+          title: topic.title,
+          excerpt: topicExcerpt,
+          link: topicLink,
+          image: topic.image_url,
+          tags: topic.tags,
+          views: topic.views,
+          comments: topic.posts_count - 1,
+          author: {
+            name: topicAuthor.name,
+            username: topicAuthor.username,
+            avatar: authorAvatar
+          },
+          likes: topic.like_count,
+          created: topic.created_at,
+          updated: topic.bumped_at
+        };
+        return topicObject;
+    });
+
+      self.calls = callsArray;
 
     }).catch()
 
@@ -154,9 +194,9 @@ cron.schedule("*/1 * * * *", () => {
                 }
 
                 if (exists(obj, self.latest_users)) {
-                  console.log("already exists");
                   if (!notUpdated(obj, self.latest_users)) {
                     self.latest_users.push(obj);
+                    console.log("user updated:" + obj);
                   }
                 }
 
