@@ -11,7 +11,7 @@ var app = express();
 app.use(cors());
 
 setInterval(function() {
-  http.get("http://edgeryders.herokuapp.com");
+  http.get("http://er-now.herokuapp.com");
   console.log("ping");
 }, 300000);
 
@@ -186,7 +186,7 @@ cron.schedule("*/2 * * * *", () => {
                     return elem.username === object.username;
                   });
                 }
-                
+
                 if (!exists(obj, self.latest_users)) {
                   self.latest_users.push(obj);
                 }
