@@ -186,20 +186,7 @@ cron.schedule("*/2 * * * *", () => {
                     return elem.username === object.username;
                   });
                 }
-
-                function notUpdated(object, array) {
-                  return array.some(function(elem) {
-                    return elem.last_posted === object.last_posted;
-                  });
-                }
-
-                if (exists(obj, self.latest_users)) {
-                  if (!notUpdated(obj, self.latest_users)) {
-                    self.latest_users.push(obj);
-                    console.log("user updated:" + obj);
-                  }
-                }
-
+                
                 if (!exists(obj, self.latest_users)) {
                   self.latest_users.push(obj);
                 }
