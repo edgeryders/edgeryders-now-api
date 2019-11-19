@@ -25,7 +25,7 @@ let data = {
   latest_users: []
 };
 
-cron.schedule("*/30 * * * * *", () => {
+cron.schedule("*/1 * * * *", () => {
   console.log("fetching festival content ✧*｡٩(ˊᗜˋ*)و✧*｡");
 
   axios
