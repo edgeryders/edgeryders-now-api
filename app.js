@@ -26,7 +26,7 @@ let data = {
   latest_users: []
 };
 
-cron.schedule("*/1 * * * *", () => {
+cron.schedule("*/2 * * * *", () => {
   console.log("fetching festival content ✧*｡٩(ˊᗜˋ*)و✧*｡");
 
   axios
@@ -144,7 +144,7 @@ cron.schedule("*/1 * * * *", () => {
 
     }).catch()
 
-  for (i = 0; i < 10; i++) {
+  for (i = 0; i < 5; i++) {
     axios
       .get("https://edgeryders.eu/latest.json?page=" + i)
       .then(function(response) {
@@ -206,7 +206,6 @@ cron.schedule("*/1 * * * *", () => {
               })
               .catch(function(error) {});
 
-            self.latest_topics.push(latest[i]);
           }
         }
         function sortByKey(array, key) {
