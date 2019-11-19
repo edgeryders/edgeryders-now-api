@@ -21,6 +21,7 @@ let data = {
   conversations: "test",
   participants: "",
   categories: "",
+  calls: "",
   latest_topics: [],
   latest_users: []
 };
@@ -96,6 +97,13 @@ cron.schedule("*/1 * * * *", () => {
     });
 
   var self = data;
+
+   axios.get("https://edgeryders.eu/tags/community-call.json").then(function(response) {
+
+      self.calls = response.data;
+
+    }).catch()
+
   for (i = 0; i < 10; i++) {
     axios
       .get("https://edgeryders.eu/latest.json?page=" + i)
